@@ -1,11 +1,75 @@
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.local
+.env.*.local
+
+# ========================
 # Python / Backend
+# ========================
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
 venv/
 .venv/
-.env
+env/
+ENV/
+.eggs/
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
 
-# Node / Frontend
+# ========================
+# Node.js / Frontend
+# ========================
 node_modules/
+.pnp
+.pnp.js
+
+# Next.js
 .next/
+out/
+build/
+
+# Testing
+coverage/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# ========================
+# IDE & OS
+# ========================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ========================
+# Vercel
+# ========================
+.vercel
+
+# ========================
+# Misc
+# ========================
+*.pem
+*.log
