@@ -7,6 +7,7 @@ import {
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useTranslation } from '@/lib/useTranslation';
 import { useToast } from "@/components/ui/use-toast";
 import { API_BASE } from '@/lib/api';
 
@@ -45,7 +46,10 @@ const MOCK_SCHEMES: Scheme[] = [
 ];
 
 export default function SchemesPage() {
+  // Merged Hooks: Translation + Toast + State
+  const t = useTranslation();
   const { toast } = useToast();
+  
   const [isUploading, setIsUploading] = useState(false);
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [showUpload, setShowUpload] = useState(false);
@@ -54,7 +58,7 @@ export default function SchemesPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch schemes from backend
+  // Fetch schemes from backend (Main Branch Logic)
   const fetchSchemes = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/documents/schemes`);
@@ -148,13 +152,13 @@ export default function SchemesPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <ShieldCheck className="w-6 h-6 text-blue-600" />
-            Active Schemes Registry
+            {t.schemes.title}
           </h1>
-          <p className="text-sm text-slate-500 mt-1">Manage public welfare schemes available to citizens</p>
+          <p className="text-sm text-slate-500 mt-1">{t.schemes.subtitle}</p>
         </div>
       </div>
 
-      {/* Upload Form */}
+      {/* Upload Form (From Main Branch) */}
       {showUpload && (
         <Card className="bg-blue-50/50 border-blue-100">
           <CardContent className="pt-6">
@@ -169,6 +173,7 @@ export default function SchemesPage() {
                 />
                 <div className="flex gap-2">
                   <Input
+                    ref={fileInputRef}
                     type="file"
                     accept=".pdf"
                     onChange={handleFileSelect}
@@ -192,20 +197,19 @@ export default function SchemesPage() {
           <div className="flex gap-4">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
-              <Input placeholder="Search schemes by name or category..." className="pl-9 bg-white" />
+              <Input placeholder={t.schemes.searchPlaceholder} className="pl-9 bg-white" />
             </div>
-
             <Button
               onClick={() => setShowUpload(true)}
               className="bg-blue-600 hover:bg-blue-700"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add New Scheme
+              {t.schemes.registerNew}
             </Button>
           </div>
         )}
 
-        {/* Scheme Grid */}
+        {/* Scheme Grid - Merged Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {schemes.map((scheme) => (
             <Card key={scheme.id} className="group hover:shadow-lg transition-all duration-300 border-slate-200 hover:border-blue-200 flex flex-col">
@@ -215,7 +219,7 @@ export default function SchemesPage() {
                 </div>
                 <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${scheme.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                   }`}>
-                  {scheme.status}
+                  {scheme.status === 'active' ? t.schemes.active : t.schemes.paused}
                 </span>
               </CardHeader>
               <CardContent className="pt-4 flex-1 flex flex-col">
@@ -233,13 +237,13 @@ export default function SchemesPage() {
                 {!scheme.description && (
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="bg-slate-50 p-2 rounded-md">
-                      <p className="text-[10px] text-slate-400 uppercase font-bold">Beneficiaries</p>
+                      <p className="text-[10px] text-slate-400 uppercase font-bold">{t.schemes.beneficiaries}</p>
                       <p className="text-sm font-semibold text-slate-700 flex items-center gap-1">
                         <Users className="w-3 h-3" /> {scheme.beneficiaries}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-2 rounded-md">
-                      <p className="text-[10px] text-slate-400 uppercase font-bold">Grant/Benefit</p>
+                      <p className="text-[10px] text-slate-400 uppercase font-bold">{t.schemes.grantBenefit}</p>
                       <p className="text-sm font-semibold text-slate-700 flex items-center gap-1">
                         <Coins className="w-3 h-3" /> {scheme.grant}
                       </p>
@@ -261,7 +265,7 @@ export default function SchemesPage() {
                   </Button>
                 ) : (
                   <Button variant="outline" className="w-full group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:border-blue-200">
-                    View Details <ExternalLink className="w-4 h-4 ml-2" />
+                    {t.schemes.viewDetails} <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
                 )}
               </CardContent>
